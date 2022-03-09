@@ -11,6 +11,7 @@ CONFIG += c++11
 SOURCES += \
     adddataapp.cpp \
     dispetcher.cpp \
+    findfile.cpp \
     getapp.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -20,6 +21,7 @@ SOURCES += \
 HEADERS += \
     adddataapp.h \
     dispetcher.h \
+    findfile.h \
     getapp.h \
     mainwindow.h \
     models.h \
@@ -28,6 +30,7 @@ HEADERS += \
 FORMS += \
     adddataapp.ui \
     dispetcher.ui \
+    findfile.ui \
     getapp.ui \
     mainwindow.ui \
     updateapp.ui

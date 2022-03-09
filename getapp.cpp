@@ -51,10 +51,10 @@ void getapp::setTextBrowser(const QString &text){
         message += "<td align=\"right\">Заказчик: " + clientList[1] + "</td></tr>";
 
         message += "<tr> <td align=\"left\"> Серия паспорта: " + dispList[2] + "</td>";
-        message += "<td align=\"right\"> Серия паспорта:  " + appList[2] + "</td>";
+        message += "<td align=\"right\"> Серия паспорта:  " + clientList[2] + "</td>";
 
         message += "<tr> <td align=\"left\"> Номер паспорта: " + dispList[3] + "</td>";
-        message += "<td align=\"right\"> Номер паспорта:  " + appList[3] + "</td>";
+        message += "<td align=\"right\"> Номер паспорта:  " + clientList[3] + "</td>";
 
         message += "<tr> <td align=\"left\"> Подпись: ___________________ </td>";
         message += "<td align=\"right\"> Подпись: ___________________ </td>";

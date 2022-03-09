@@ -22,6 +22,12 @@ public:
 private slots:
     void on_saveAppBut_clicked();
 
+    void on_successStatusBox_stateChanged(int arg1);
+
+    void on_newStatusBox_stateChanged(int arg1);
+
+    void on_rejectStatusBox_stateChanged(int arg1);
+
 private:
     Ui::updateapp *ui;
 };

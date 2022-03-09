@@ -55,48 +55,42 @@ void adddataapp::on_saveAppBut_clicked()
 
     if (app.codeDispetcher != disp.code or app.codePeople != cleint.code){
         QMessageBox::warning(this, "Ошибка", "Данные не корректные !");
-    }
-
-    if (disp.code.isEmpty() or disp.address.isEmpty() or cleint.code.isEmpty() or cleint.address.isEmpty()){
-        QMessageBox::warning(this, "Ошибка", "Данные не могут быть пустыми ! Заполните все поля", QMessageBox::Cancel);
     } else {
-        QString path("/files/");
-        QDir dir;
-
-        if (!dir.exists(path)){
-            dir.mkdir(path);
-        }
-
-        QString fileName = "status" + app.status + "-" + disp.code + "-" + cleint.code + "-" + app.dateTime.toString("yyyy-MM-dd");
-        QFile file ("files/" + fileName + ".txt");
-
-        if (file.exists()){
-            QMessageBox::warning(this, "Ошибка", "Файл уже существует с таким кодом!");
-        }
-
-        if (!file.open(QIODevice::WriteOnly)){
-            QMessageBox::warning(this, "Ошибка", "Не удается открыть файл!");
+        if (disp.code.isEmpty() or disp.address.isEmpty() or cleint.code.isEmpty() or cleint.address.isEmpty()){
+            QMessageBox::warning(this, "Ошибка", "Данные не могут быть пустыми ! Заполните все поля", QMessageBox::Cancel);
         } else {
-            QTextStream stream(&file);
-            QString dataFile;
+            QString path("/files/");
+            QDir dir;
 
-            dataFile = disp.code + "," + disp.fullName + "," + disp.codePasport + "," + disp.numberPasport + "," + disp.address + "|";
-            dataFile += cleint.code + "," + cleint.fullName + "," + cleint.codePasport + "," + cleint.numberPassport + "," + cleint.address + "|";
-            dataFile += app.codeDispetcher + "," + app.codePeople + "," + app.dateTime.toString("yyyy-MM-dd") + "," + app.status + "," + app.comment + "\n";
-             //todo Дописать
-            stream << dataFile;
+            if (!dir.exists(path)){
+                dir.mkdir(path);
+            }
 
-            QMessageBox::information(this, "Успешно", "Даныне успешно сохранены");
-            file.close();
+            QString fileName = "status" + app.status + "-" + disp.code + "-" + cleint.code + "-" + app.dateTime.toString("yyyy-MM-dd");
+            QFile file ("files/" + fileName + ".txt");
 
-            this->hide();
+            if (file.exists()){
+                QMessageBox::warning(this, "Ошибка", "Файл уже существует с таким кодом!");
+            }
 
-            qDebug() << "KEK";
+            if (!file.open(QIODevice::WriteOnly)){
+                QMessageBox::warning(this, "Ошибка", "Не удается открыть файл!");
+            } else {
+                QTextStream stream(&file);
+                QString dataFile;
 
-            this->updateTable();
+                dataFile = disp.code + "," + disp.fullName + "," + disp.codePasport + "," + disp.numberPasport + "," + disp.address + "|";
+                dataFile += cleint.code + "," + cleint.fullName + "," + cleint.codePasport + "," + cleint.numberPassport + "," + cleint.address + "|";
+                dataFile += app.codeDispetcher + "," + app.codePeople + "," + app.dateTime.toString("yyyy-MM-dd") + "," + app.status + "," + app.comment + "\n";
 
-            qDebug() << "PET";
-        }
+                stream << dataFile;
+                file.close();
+
+                this->hide();
+
+                QMessageBox::information(this, "Успешно", "Даныне успешно сохранены");
+            }
+    }
     }
 
 }
@@ -104,16 +98,16 @@ void adddataapp::on_saveAppBut_clicked()
 void adddataapp::on_newStatusBox_stateChanged(int arg1)
 {
     if (ui->newStatusBox->isChecked()){
-        ui->rejectStatusBox->setCheckState(Qt::Unchecked);
-        ui->successStatusBox->setCheckState(Qt::Unchecked);
+        ui->rejectStatusBox->setChecked(false);
+        ui->successStatusBox->setChecked(false);
     }
 }
 
 void adddataapp::on_successStatusBox_stateChanged(int arg1)
 {
     if (ui->successStatusBox->isChecked()){
-        ui->rejectStatusBox->setCheckState(Qt::Unchecked);
-        ui->newStatusBox->setCheckState(Qt::Unchecked);
+        ui->rejectStatusBox->setChecked(false);
+        ui->newStatusBox->setChecked(false);
     }
 }
 
@@ -121,8 +115,8 @@ void adddataapp::on_successStatusBox_stateChanged(int arg1)
 void adddataapp::on_rejectStatusBox_stateChanged(int arg1)
 {
     if (ui->rejectStatusBox->isChecked()){
-        ui->successStatusBox->setCheckState(Qt::Unchecked);
-        ui->newStatusBox->setCheckState(Qt::Unchecked);
+        ui->successStatusBox->setChecked(false);
+        ui->newStatusBox->setChecked(false);
     }
 }
 
@@ -139,12 +133,4 @@ void adddataapp::on_codeFlutTextEdit_modificationChanged(bool arg1)
     QString codeDisp = ui->codeFlutTextEdit->toPlainText();
     ui->codeFlutAppTextEdit->setPlainText(codeDisp);
     ui->codeTextEdit->redo();
-}
-
-void adddataapp::updateTable()
-{
-    qDebug() << "USE";
-
-    MainWindow mv = new MainWindow();
-    mv.fillTable();
 }

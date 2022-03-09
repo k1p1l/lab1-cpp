@@ -31,9 +31,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Stretch);
-    ui->tableWidget->setColumnHidden(4, true);
+    ui->tableWidget->setColumnHidden(4, true); // Скрытый столбец, для хранения пути к файлу
 
-    fillTable();
+    fillTable(NULL);
 }
 
 MainWindow::~MainWindow()
@@ -41,7 +41,12 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
+/**
+ * Метод для отображения окна (Добавление новой заявки)
+ *      Кнопка на экране (Добавить заявку)
+ *
+ * @brief MainWindow::on_pushButton_clicked
+ */
 void MainWindow::on_pushButton_clicked()
 {
    adddataapp adddata;
@@ -50,12 +55,23 @@ void MainWindow::on_pushButton_clicked()
 }
 
 
+/**
+ * Метод для тестирования
+ *      Ищется название файал, имеется сркытый столбец, который хранит путь к файлу
+ *
+ * @brief MainWindow::on_tableWidget_itemSelectionChanged
+ */
 void MainWindow::on_tableWidget_itemSelectionChanged()
 {
     qDebug() << ui->tableWidget->selectionModel()->selectedRows(4).value(0).data().toString();
 }
 
-
+/**
+ * Удаление файла и удаление строчки из файла
+ *      Кнопка на экране (Удалить заявку)
+ *
+ * @brief MainWindow::on_pushButton_4_clicked
+ */
 void MainWindow::on_pushButton_4_clicked()
 {
      QString pathName = ui->tableWidget->selectionModel()->selectedRows(4).value(0).data().toString();
@@ -85,12 +101,18 @@ void MainWindow::on_pushButton_4_clicked()
      }
 }
 
-void MainWindow::fillTable()
+/**
+ * Метод для вывод информации в таблицу
+ *
+ * @brief MainWindow::fillTable
+ */
+void MainWindow::fillTable(QString searchParam = NULL)
 {
     qDebug() << "FILTABLE";
 
     QDir dir;
 
+    // Обьявление переменных
     QString statusApp;
     QString addressClient;
     QString dateTime;
@@ -100,23 +122,31 @@ void MainWindow::fillTable()
 
     int row = 0;  
 
+    // Пробегаемся по директории с файлами
     QDirIterator iterator(dir.currentPath() + "/files/", QDirIterator::Subdirectories);
     while (iterator.hasNext()) {
         QFile file(iterator.next());
+        // Открываем каждый файл в отдельности. Цикл.
         if ( file.open(QIODevice::ReadOnly) ) {
 
             if (!file.exists()){
                 return;
             }
 
+            if (!searchParam.isEmpty()){
+                QString fileName = file.fileName();
+                if (!fileName.contains(searchParam)){
+                    continue;
+                }
+            }
+
             ui->tableWidget->setRowCount(ui->tableWidget->rowCount() + 1);
 
-            qDebug() << "ADD";
-
+            // Формируем данные
             QString fileName = file.fileName();
             QStringList list = fileName.split("status");
+            statusApp = list[1].split("-")[0];
 
-            statusApp = list[1].split("-")[1];
             if (statusApp == "1"){
                 statusApp = "Новая заявка";
                 toolTip = "Новая заявка необходимо обработать!";
@@ -145,6 +175,7 @@ void MainWindow::fillTable()
             dateTime = appList[2];
             description = appList[4];
 
+            // Заполняем данные таблицы
             ui->tableWidget->setItem(row, 0, new QTableWidgetItem(statusApp));
             ui->tableWidget->setItem(row, 1, new QTableWidgetItem(addressClient));
             ui->tableWidget->setItem(row, 2, new QTableWidgetItem(dateTime));
@@ -158,6 +189,8 @@ void MainWindow::fillTable()
             ui->tableWidget->item(row, 3)->setBackground(QBrush(color));
 
             row++;
+
+            file.close();
         } else {
             qDebug() << "Can't open " << file.fileName() << file.errorString();
         }
@@ -166,7 +199,12 @@ void MainWindow::fillTable()
     row = 0;
 }
 
-
+/**
+ * Метод для генерации окна, детальная информация по заявке
+ *      Кнопка на экране (Распечатать заявку)
+ *
+ * @brief MainWindow::on_pushButton_5_clicked
+ */
 void MainWindow::on_pushButton_5_clicked()
 {
     QString pathName = ui->tableWidget->selectionModel()->selectedRows(4).value(0).data().toString();
@@ -179,31 +217,34 @@ void MainWindow::on_pushButton_5_clicked()
 
         if ( file.open(QIODevice::ReadOnly) ) {
              QString data = file.readAll();
+             file.close();
 
              getapp windowGetApp;
              windowGetApp.setTextBrowser(data);
              windowGetApp.exec();
-
         } else {
            QMessageBox::warning(this, "Ошибка", "Не удалось прочитать файл");
         }
     }
 }
 
-
+/**
+ * Обновление таблицы.
+ *      Кнопка на экране (Обновить таблицу)
+ *
+ * @brief MainWindow::on_pushButton_6_clicked
+ */
 void MainWindow::on_pushButton_6_clicked()
 {
-    QDir dir(dir.currentPath() + "/files");
-    int countFiles = dir.count() - 2;
-
-    if (ui->tableWidget->rowCount() == countFiles){
-        return;
-    } else {
-        fillTable();
-    }
+     fillTable();
 }
 
-
+/**
+ * Обновление данных по заявке.
+ *      Кнопка на экране (Обновить заявку)
+ *
+ * @brief MainWindow::on_pushButton_2_clicked
+ */
 void MainWindow::on_pushButton_2_clicked()
 {
     QString pathName = ui->tableWidget->selectionModel()->selectedRows(4).value(0).data().toString();
@@ -214,15 +255,67 @@ void MainWindow::on_pushButton_2_clicked()
     } else {
         QFile file(pathName);
 
-        if ( file.open(QIODevice::ReadOnly) ) {
+        if ( file.open(QIODevice::WriteOnly|QIODevice::ReadOnly) ) {
              QString data = file.readAll();
+             file.close();
+
+             qDebug() << "Select file: " + file.fileName();
+             qDebug() << "Status file: " + QString::number(file.isOpen());
 
              updateapp windowUpdateApp;
              windowUpdateApp.updateApp(data);
              windowUpdateApp.exec();
-
         } else {
            QMessageBox::warning(this, "Ошибка", "Не удалось прочитать файл");
+        }
+    }
+}
+
+/**
+ * Поиск файлов по фильтру
+ *      Кнопка на экране (Найти заявку)
+ *
+ * @brief MainWindow::on_pushButton_3_clicked
+ */
+void MainWindow::on_pushButton_3_clicked()
+{
+    findfile windowFindFile;
+    windowFindFile.exec();
+
+    QString searchString = windowFindFile.getSearchString();
+    QString trimSearchString = searchString.trimmed().toLower().replace(" ", "");
+    QString statusSearch;
+
+    if (trimSearchString == "clearfilter"){
+        ui->tableWidget->clear();
+
+        this->fillTable(NULL);
+        return;
+    }
+
+    if (trimSearchString.contains("новаязаявка")){
+        statusSearch = "status1";
+    } else if (trimSearchString.contains("заявкаотклонена")){
+        statusSearch = "status3";
+    } else if (trimSearchString.contains("заявкавыполнена")){
+        statusSearch = "status2";
+    }
+
+    qDebug() << "TRIM: " + trimSearchString;
+    qDebug() << "Status: " + statusSearch;
+
+    QDir dir;
+    QDirIterator iterator(dir.currentPath() + "/files/", QDirIterator::Subdirectories);
+    while (iterator.hasNext()) {
+        iterator.next();
+        QString fileName = iterator.fileName();
+
+        qDebug() << "String: " + fileName;
+
+        if (!statusSearch.isEmpty() and fileName.contains(statusSearch)){
+            ui->tableWidget->clear();
+
+            this->fillTable(statusSearch);
         }
     }
 }

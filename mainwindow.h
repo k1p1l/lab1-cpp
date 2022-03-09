@@ -8,6 +8,7 @@
 #include "adddataapp.h"
 #include "getapp.h"
 #include "updateapp.h"
+#include "findfile.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -22,7 +23,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void fillTable();
+    void fillTable(QString searchParam);
 
     void setTextAppInfo();
 
@@ -38,6 +39,8 @@ private slots:
     void on_pushButton_6_clicked();
 
     void on_pushButton_2_clicked();
+
+    void on_pushButton_3_clicked();
 
 private:
     Ui::MainWindow *ui;

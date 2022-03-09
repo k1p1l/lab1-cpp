@@ -109,22 +109,17 @@ void updateapp::on_saveAppBut_clicked()
         QString fileName = "status" + app.status + "-" + disp.code + "-" + cleint.code + "-" + app.dateTime.toString("yyyy-MM-dd");
         QFile file ("files/" + fileName + ".txt");
 
+        QMessageBox msgBox;
+
         if (!dir.exists("files/"+originalNameFile)){
             QMessageBox::warning(this, "Ошибка", "Такого файла не существует !");
         } else {
-            QMessageBox msgBox;
             msgBox.setWindowTitle("Предупреждение");
             msgBox.setText("Вы действительно хотите удалить файл ?");
             msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::Cancel);
             msgBox.setButtonText(QMessageBox::Yes, tr("Да"));
             msgBox.setButtonText(QMessageBox::Cancel, tr("Нет"));
             msgBox.setDefaultButton(QMessageBox::Cancel);
-
-            if(msgBox.exec() == QMessageBox::Yes){
-               dir.remove("files/"+ originalNameFile);
-               QMessageBox::warning(this, "Ошибка", "Удалился !");
-               qDebug() << "files/" + originalNameFile;
-            }
         }
 
         if (file.exists()){
@@ -133,6 +128,12 @@ void updateapp::on_saveAppBut_clicked()
             if (!file.open(QIODevice::WriteOnly)){
                 QMessageBox::warning(this, "Ошибка", "Не удается открыть файл!");
             } else {
+                if(msgBox.exec() == QMessageBox::Yes){
+                    QString entryAbsPath = dir.absolutePath() + "/files/" + originalNameFile;
+                    QFile::setPermissions(entryAbsPath, QFile::ReadOwner | QFile::WriteOwner);
+                    QFile::remove(entryAbsPath);
+                }
+
                 QTextStream stream(&file);
                 QString dataFile;
 
@@ -148,6 +149,33 @@ void updateapp::on_saveAppBut_clicked()
                 this->hide();
             }
         }
+    }
+}
+
+
+void updateapp::on_successStatusBox_stateChanged(int arg1)
+{
+    if (ui->newStatusBox->isChecked()){
+        ui->rejectStatusBox->setChecked(false);
+        ui->successStatusBox->setChecked(false);
+    }
+}
+
+
+void updateapp::on_newStatusBox_stateChanged(int arg1)
+{
+    if (ui->newStatusBox->isChecked()){
+        ui->rejectStatusBox->setChecked(false);
+        ui->successStatusBox->setChecked(false);
+    }
+}
+
+
+void updateapp::on_rejectStatusBox_stateChanged(int arg1)
+{
+    if (ui->rejectStatusBox->isChecked()){
+        ui->successStatusBox->setChecked(false);
+        ui->newStatusBox->setChecked(false);
     }
 }
 
