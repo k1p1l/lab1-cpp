@@ -24,7 +24,7 @@ adddataapp::~adddataapp()
 void adddataapp::on_saveAppBut_clicked()
 {
     struct strucDispetcher disp;
-    struct structFlat flat;
+    struct structClient cleint;
     struct structApplication app;
 
     disp.code = ui->codeTextEdit->toPlainText();
@@ -33,11 +33,11 @@ void adddataapp::on_saveAppBut_clicked()
     disp.numberPasport = ui->numbetPasportTextEdit->toPlainText();
     disp.address = ui->addressTextEdit->toPlainText();
 
-    flat.code = ui->codeFlutTextEdit->toPlainText();
-    flat.fullName = ui->fullNameFlutTextEdit->toPlainText();
-    flat.codePasport = ui->codePasportFlutTextEdit->toPlainText();
-    flat.numberPassport = ui->numbetPasportFlutTextEdit->toPlainText();
-    flat.address = ui->addressFlutTextEdit->toPlainText();
+    cleint.code = ui->codeFlutTextEdit->toPlainText();
+    cleint.fullName = ui->fullNameFlutTextEdit->toPlainText();
+    cleint.codePasport = ui->codePasportFlutTextEdit->toPlainText();
+    cleint.numberPassport = ui->numbetPasportFlutTextEdit->toPlainText();
+    cleint.address = ui->addressFlutTextEdit->toPlainText();
 
     app.codeDispetcher = ui->codeDispAppTextEdit->toPlainText();
     app.codePeople = ui->codeFlutAppTextEdit->toPlainText();
@@ -53,11 +53,11 @@ void adddataapp::on_saveAppBut_clicked()
     }
 
 
-    if (app.codeDispetcher != disp.code or app.codePeople != flat.code){
+    if (app.codeDispetcher != disp.code or app.codePeople != cleint.code){
         QMessageBox::warning(this, "Ошибка", "Данные не корректные !");
     }
 
-    if (disp.code.isEmpty() or disp.address.isEmpty() or flat.code.isEmpty() or flat.address.isEmpty()){
+    if (disp.code.isEmpty() or disp.address.isEmpty() or cleint.code.isEmpty() or cleint.address.isEmpty()){
         QMessageBox::warning(this, "Ошибка", "Данные не могут быть пустыми ! Заполните все поля", QMessageBox::Cancel);
     } else {
         QString path("/files/");
@@ -67,7 +67,7 @@ void adddataapp::on_saveAppBut_clicked()
             dir.mkdir(path);
         }
 
-        QString fileName = "status" + app.status + "-" + disp.code + "-" + flat.code + "-" + app.dateTime.toString("yyyy-MM-dd");
+        QString fileName = "status" + app.status + "-" + disp.code + "-" + cleint.code + "-" + app.dateTime.toString("yyyy-MM-dd");
         QFile file ("files/" + fileName + ".txt");
 
         if (file.exists()){
@@ -81,7 +81,7 @@ void adddataapp::on_saveAppBut_clicked()
             QString dataFile;
 
             dataFile = disp.code + "," + disp.fullName + "," + disp.codePasport + "," + disp.numberPasport + "," + disp.address + "|";
-            dataFile += flat.code + "," + flat.fullName + "," + flat.codePasport + "," + flat.numberPassport + "," + flat.address + "|";
+            dataFile += cleint.code + "," + cleint.fullName + "," + cleint.codePasport + "," + cleint.numberPassport + "," + cleint.address + "|";
             dataFile += app.codeDispetcher + "," + app.codePeople + "," + app.dateTime.toString("yyyy-MM-dd") + "," + app.status + "," + app.comment + "\n";
              //todo Дописать
             stream << dataFile;

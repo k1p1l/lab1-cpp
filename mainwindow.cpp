@@ -74,6 +74,13 @@ void MainWindow::on_pushButton_4_clicked()
 
          if(msgBox.exec() == QMessageBox::Yes){
             dir.remove(pathName);
+
+            QModelIndexList selection = ui->tableWidget->selectionModel()->selectedRows();
+            for(int i=0; i< selection.count(); i++)
+            {
+                QModelIndex index = selection.at(i);
+                ui->tableWidget->removeRow(index.row() - 1);
+            }
          }
      }
 }
@@ -91,14 +98,20 @@ void MainWindow::fillTable()
     QColor color;
     QString toolTip;
 
-    int row = 0;
+    int row = 0;  
 
     QDirIterator iterator(dir.currentPath() + "/files/", QDirIterator::Subdirectories);
     while (iterator.hasNext()) {
         QFile file(iterator.next());
         if ( file.open(QIODevice::ReadOnly) ) {
+
+            if (!file.exists()){
+                return;
+            }
+
             ui->tableWidget->setRowCount(ui->tableWidget->rowCount() + 1);
 
+            qDebug() << "ADD";
 
             QString fileName = file.fileName();
             QStringList list = fileName.split("status");
@@ -151,5 +164,42 @@ void MainWindow::fillTable()
     }
 
     row = 0;
+}
+
+
+void MainWindow::on_pushButton_5_clicked()
+{
+    QString pathName = ui->tableWidget->selectionModel()->selectedRows(4).value(0).data().toString();
+    QDir dir;
+
+    if (!dir.exists(pathName)){
+        QMessageBox::warning(this, "Ошибка", "Выберите заявку");
+    } else {
+        QFile file(pathName);
+
+        if ( file.open(QIODevice::ReadOnly) ) {
+             QString data = file.readAll();
+
+             getapp getapp;
+             getapp.setTextBrowser(data);
+             getapp.exec();
+
+        } else {
+           QMessageBox::warning(this, "Ошибка", "Не удалось прочитать файл");
+        }
+    }
+}
+
+
+void MainWindow::on_pushButton_6_clicked()
+{
+    QDir dir(dir.currentPath() + "/files");
+    int countFiles = dir.count() - 2;
+
+    if (ui->tableWidget->rowCount() == countFiles){
+        return;
+    } else {
+        fillTable();
+    }
 }
 

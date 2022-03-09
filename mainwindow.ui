@@ -25,28 +25,42 @@
         <item>
          <widget class="QPushButton" name="pushButton">
           <property name="text">
-           <string>Add</string>
+           <string>Добавить заявку</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_5">
+          <property name="text">
+           <string>Распечатать заявку</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="pushButton_2">
           <property name="text">
-           <string>Update</string>
+           <string>Обновить заявку</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="pushButton_3">
           <property name="text">
-           <string>Search</string>
+           <string>Найти заявку</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="pushButton_4">
           <property name="text">
-           <string>Delete</string>
+           <string>Удалить заявку</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_6">
+          <property name="text">
+           <string>Обновить таблицу</string>
           </property>
          </widget>
         </item>

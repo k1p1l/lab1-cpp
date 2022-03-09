@@ -11,6 +11,7 @@ CONFIG += c++11
 SOURCES += \
     adddataapp.cpp \
     dispetcher.cpp \
+    getapp.cpp \
     main.cpp \
     mainwindow.cpp \
     models.cpp
@@ -18,12 +19,14 @@ SOURCES += \
 HEADERS += \
     adddataapp.h \
     dispetcher.h \
+    getapp.h \
     mainwindow.h \
     models.h
 
 FORMS += \
     adddataapp.ui \
     dispetcher.ui \
+    getapp.ui \
     mainwindow.ui
 
 # Default rules for deployment.

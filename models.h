@@ -14,7 +14,7 @@ struct strucDispetcher {
 };
 
 // Обьект Квартира
-struct structFlat {
+struct structClient {
     QString code; // Код человека
     QString fullName; // ФИО человека
     QString codePasport; // Код паспорта

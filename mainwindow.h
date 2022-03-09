@@ -6,6 +6,7 @@
 #include "dispetcher.h"
 #include "models.h"
 #include "adddataapp.h"
+#include "getapp.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -22,12 +23,18 @@ public:
 
     void fillTable();
 
+    void setTextAppInfo();
+
 private slots:
     void on_pushButton_clicked();
 
     void on_tableWidget_itemSelectionChanged();
 
     void on_pushButton_4_clicked();
+
+    void on_pushButton_5_clicked();
+
+    void on_pushButton_6_clicked();
 
 private:
     Ui::MainWindow *ui;

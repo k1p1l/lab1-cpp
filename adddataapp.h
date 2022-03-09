@@ -19,6 +19,8 @@ public:
 
     void updateTable();
 
+signals:
+
 private slots:
     void on_saveAppBut_clicked();
 
