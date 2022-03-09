@@ -14,20 +14,23 @@ SOURCES += \
     getapp.cpp \
     main.cpp \
     mainwindow.cpp \
-    models.cpp
+    models.cpp \
+    updateapp.cpp
 
 HEADERS += \
     adddataapp.h \
     dispetcher.h \
     getapp.h \
     mainwindow.h \
-    models.h
+    models.h \
+    updateapp.h
 
 FORMS += \
     adddataapp.ui \
     dispetcher.ui \
     getapp.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    updateapp.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

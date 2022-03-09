@@ -180,9 +180,9 @@ void MainWindow::on_pushButton_5_clicked()
         if ( file.open(QIODevice::ReadOnly) ) {
              QString data = file.readAll();
 
-             getapp getapp;
-             getapp.setTextBrowser(data);
-             getapp.exec();
+             getapp windowGetApp;
+             windowGetApp.setTextBrowser(data);
+             windowGetApp.exec();
 
         } else {
            QMessageBox::warning(this, "Ошибка", "Не удалось прочитать файл");
@@ -200,6 +200,30 @@ void MainWindow::on_pushButton_6_clicked()
         return;
     } else {
         fillTable();
+    }
+}
+
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    QString pathName = ui->tableWidget->selectionModel()->selectedRows(4).value(0).data().toString();
+    QDir dir;
+
+    if (!dir.exists(pathName)){
+        QMessageBox::warning(this, "Ошибка", "Выберите заявку");
+    } else {
+        QFile file(pathName);
+
+        if ( file.open(QIODevice::ReadOnly) ) {
+             QString data = file.readAll();
+
+             updateapp windowUpdateApp;
+             windowUpdateApp.updateApp(data);
+             windowUpdateApp.exec();
+
+        } else {
+           QMessageBox::warning(this, "Ошибка", "Не удалось прочитать файл");
+        }
     }
 }
 
