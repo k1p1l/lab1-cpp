@@ -21,12 +21,22 @@ adddataapp::~adddataapp()
     delete ui;
 }
 
+/**
+ * Метод сохранения данных
+ *      Даныне из полей сохраняеются в структуре обьекта
+ *          После чего при обращении к стрктуре полученные данные сохраняются в файл
+ *
+ * @brief adddataapp::on_saveAppBut_clicked
+ */
 void adddataapp::on_saveAppBut_clicked()
 {
     struct strucDispetcher disp;
     struct structClient cleint;
     struct structApplication app;
 
+    /**
+     * Получаем данные из полей и заполняем атрибуты стрктур
+     */
     disp.code = ui->codeTextEdit->toPlainText();
     disp.fullName = ui->fullNameTextEdit->toPlainText();
     disp.codePasport = ui->codePasportTextEdit->toPlainText();
@@ -52,7 +62,9 @@ void adddataapp::on_saveAppBut_clicked()
         app.status = "3";
     }
 
-
+    /*
+     * Валидация входных данных
+     */
     if (app.codeDispetcher != disp.code or app.codePeople != cleint.code){
         QMessageBox::warning(this, "Ошибка", "Данные не корректные !");
     } else {
@@ -79,10 +91,14 @@ void adddataapp::on_saveAppBut_clicked()
                 QTextStream stream(&file);
                 QString dataFile;
 
+                // Формируем строку с данным (dataFile)
+                // Разделяем каждую стрктуре знаком (|)
+                //      А атрибуты стрктуры разделяем занком (,)
                 dataFile = disp.code + "," + disp.fullName + "," + disp.codePasport + "," + disp.numberPasport + "," + disp.address + "|";
                 dataFile += cleint.code + "," + cleint.fullName + "," + cleint.codePasport + "," + cleint.numberPassport + "," + cleint.address + "|";
                 dataFile += app.codeDispetcher + "," + app.codePeople + "," + app.dateTime.toString("yyyy-MM-dd") + "," + app.status + "," + app.comment + "\n";
 
+                // Записываем данные в файл.
                 stream << dataFile;
                 file.close();
 
@@ -95,6 +111,12 @@ void adddataapp::on_saveAppBut_clicked()
 
 }
 
+/**
+ * Логика с чекбокасами
+ *
+ * @brief adddataapp::on_newStatusBox_stateChanged
+ * @param arg1
+ */
 void adddataapp::on_newStatusBox_stateChanged(int arg1)
 {
     if (ui->newStatusBox->isChecked()){

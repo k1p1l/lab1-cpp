@@ -18,6 +18,14 @@ updateapp::~updateapp()
     delete ui;
 }
 
+/**
+ * Заполнение данных на странице
+ *      Полученные данные из файла, передаются в параметре метода
+ *          Заполняем поля данными
+ *
+ * @brief updateapp::updateApp
+ * @param text
+ */
 void updateapp::updateApp(const QString &text){
     QString message;
 
@@ -60,6 +68,12 @@ void updateapp::updateApp(const QString &text){
     originalNameFile = "status" + appList[3] + "-" + dispList[0] + "-" + clientList[0] + "-" + appList[2] + ".txt";
 }
 
+/**
+ * Сохраняем данные из полей в структуру
+ *      Записываем данные из стркутры в файл
+ *
+ * @brief updateapp::on_saveAppBut_clicked
+ */
 void updateapp::on_saveAppBut_clicked()
 {
     struct strucDispetcher disp;

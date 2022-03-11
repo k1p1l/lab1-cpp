@@ -282,10 +282,12 @@ void MainWindow::on_pushButton_3_clicked()
     findfile windowFindFile;
     windowFindFile.exec();
 
+    // Получаем значение, по нажатию на кнопки (Найти) со страницы windowFindFile
     QString searchString = windowFindFile.getSearchString();
     QString trimSearchString = searchString.trimmed().toLower().replace(" ", "");
     QString statusSearch;
 
+    // Очищаем таблицу, когда не указан фильтр. По нажатию на кнопки (Отмена) со страницы windowFindFile
     if (trimSearchString == "clearfilter"){
         ui->tableWidget->clear();
 
@@ -313,8 +315,9 @@ void MainWindow::on_pushButton_3_clicked()
         qDebug() << "String: " + fileName;
 
         if (!statusSearch.isEmpty() and fileName.contains(statusSearch)){
+            // Очищяем таблицу от старых данных
             ui->tableWidget->clear();
-
+            // Передаем параметр по которому происходит поиск
             this->fillTable(statusSearch);
         }
     }
